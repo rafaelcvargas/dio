@@ -1,0 +1,21 @@
+﻿Segue lista de Melhorias efetuadas no projeto - Rafael C Vargas
+
+01 - Utilização de Interface na classe Conta
+
+02 - Validação se valor do saque, deposito e transferência é maior que 0.
+
+03 - Melhorado retorno das respostas dos métodos de saque, deposito e transferência.
+
+04 - Mudança no tipo de retorno de depositar e transferir que antes não tinha retorno(era void) e agora retorna um bool.
+
+05 - Verificação se existe o numero da conta que no caso seria o índice da lista devido não usar banco de dados. Essa verificação é feita antes de executar os métodos de saque, deposito ou transferência.
+
+06 - Formatado as saídas de mensagens que utilizavam o saldo e credito com .ToString("C") para formatar como valor monetário ex: R$ 1,99 
+
+07  -
+
+08  -
+
+09  -
+
+10  -

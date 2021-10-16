@@ -5,8 +5,8 @@ namespace ConsoleBankRafa.Interfaces
     {
         bool Sacar(double valorSaque);
 
-        void Depositar(double valorDeposito);
+        bool Depositar(double valorDeposito, bool OrigemPorTransferencia);
 
-        void Transferir(double valorTransferencia, Conta contaDestino);
+        bool Transferir(double valorTransferencia, Conta contaDestino);
     }
 }

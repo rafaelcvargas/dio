@@ -45,15 +45,29 @@ namespace ConsoleBankRafa
             Console.ReadLine();
         }
 
+        #region Metodos
         private static void Depositar()
         {
             Console.Write("Digite o número da conta: ");
             int indiceConta = int.Parse(Console.ReadLine());
-
             Console.Write("Digite o valor a ser depositado: ");
             double valorDeposito = double.Parse(Console.ReadLine());
 
-            listContas[indiceConta].Depositar(valorDeposito);
+            if (valorDeposito <= 0)
+            {
+                Console.WriteLine("Valor do deposito deve ser maior que 0, verifique o mesmo e tente novamente.");
+            }
+            else
+            {
+                if (Utils.ValidaIdLista(listContas, indiceConta))
+                {
+                    listContas[indiceConta].Depositar(valorDeposito, false);
+                }
+                else
+                {
+                    Console.WriteLine("Número da conta não foi encontrado, verifique o mesmo e tente novamente.");
+                }
+            }
         }
 
         private static void Sacar()
@@ -64,7 +78,14 @@ namespace ConsoleBankRafa
             Console.Write("Digite o valor a ser sacado: ");
             double valorSaque = double.Parse(Console.ReadLine());
 
-            listContas[indiceConta].Sacar(valorSaque);
+            if (Utils.ValidaIdLista(listContas, indiceConta))
+            {
+                listContas[indiceConta].Sacar(valorSaque);
+            }
+            else
+            {
+                Console.WriteLine("Número da conta não foi encontrado, verifique o mesmo e tente novamente.");
+            }
         }
 
         private static void Transferir()
@@ -78,7 +99,14 @@ namespace ConsoleBankRafa
             Console.Write("Digite o valor a ser transferido: ");
             double valorTransferencia = double.Parse(Console.ReadLine());
 
-            listContas[indiceContaOrigem].Transferir(valorTransferencia, listContas[indiceContaDestino]);
+            if (Utils.ValidaIdLista(listContas, indiceContaOrigem) && Utils.ValidaIdLista(listContas, indiceContaDestino))
+            {
+                listContas[indiceContaOrigem].Transferir(valorTransferencia, listContas[indiceContaDestino]);
+            }
+            else
+            {
+                Console.WriteLine("Número de conta(s) não foi encontrado, verifique o mesmo e tente novamente.");
+            }
         }
 
         private static void InserirConta()
@@ -142,5 +170,7 @@ namespace ConsoleBankRafa
             Console.WriteLine();
             return opcaoUsuario;
         }
+
+        #endregion
     }
 }

@@ -7,17 +7,17 @@ namespace ConsoleBankRafa.Classes
     public class Conta : IConta
     {
         #region Atributos
-        
+
         /// <summary>
         /// Tipo de Conta
         /// </summary>
         private TipoConta tipoConta { get; set; }
-        
+
         /// <summary>
         /// Saldo
         /// </summary>
         private double saldo { get; set; }
-        
+
         /// <summary>
         /// Credito
         /// </summary>
@@ -46,8 +46,8 @@ namespace ConsoleBankRafa.Classes
             string retorno = string.Empty;
             retorno += "TipoConta " + this.tipoConta + " | ";
             retorno += "Nome " + this.nome + " | ";
-            retorno += "Saldo " + this.saldo + " | ";
-            retorno += "Crédito " + this.credito;
+            retorno += "Saldo " + this.saldo.ToString("C") + " | ";
+            retorno += "Crédito " + this.credito.ToString("C");
             return retorno;
         }
 
@@ -58,25 +58,56 @@ namespace ConsoleBankRafa.Classes
         /// <returns></returns>
         public bool Sacar(double valorSaque)
         {
-            // Valida saldo insuficiente
-            if (this.saldo - valorSaque < (this.credito * -1))
+            bool sacou = false;
+
+            if (valorSaque > 0)
             {
-                Console.WriteLine("Saldo insuficiente!");
-                return false;
+                // Valida saldo insuficiente
+                if (this.saldo - valorSaque < (this.credito * -1))
+                {
+                    sacou = false;
+                    Console.WriteLine("Saldo insuficiente!");
+                }
+                else
+                {
+                    this.saldo -= valorSaque;
+                    sacou = true;
+                    Console.WriteLine("Saldo atual da conta de {0} é {1}", this.nome, this.saldo.ToString("C"));
+                }
             }
-            this.saldo -= valorSaque;
-            Console.WriteLine("Saldo atual da conta de {0} é {1}", this.nome, this.saldo);
-            return true;
+            else
+            {
+                sacou = false;
+                Console.WriteLine("Valor Saque menor que 0.");
+            }
+
+            return sacou;
         }
 
         /// <summary>
         /// Depositar
         /// </summary>
         /// <param name="valorDeposito"></param>
-        public void Depositar(double valorDeposito)
+        public bool Depositar(double valorDeposito, bool OrigemPorTransferencia)
         {
-            this.saldo += valorDeposito;
-            Console.WriteLine("Saldo atual da conta de {0} é {1}", this.nome, this.saldo);
+            bool depositou = false;
+
+            if (valorDeposito > 0)
+            {
+                this.saldo += valorDeposito;
+                depositou = true;
+                if (!OrigemPorTransferencia)
+                {
+                    Console.WriteLine("Saldo atual da conta de {0} é {1}", this.nome, this.saldo.ToString("C"));
+                }
+            }
+            else
+            {
+                depositou = false;
+                Console.WriteLine("Valor Deposito menor que 0.");
+            }
+
+            return depositou;
         }
 
         /// <summary>
@@ -84,12 +115,31 @@ namespace ConsoleBankRafa.Classes
         /// </summary>
         /// <param name="valorTransferencia"></param>
         /// <param name="contaDestino"></param>
-        public void Transferir(double valorTransferencia, Conta contaDestino)
+        public bool Transferir(double valorTransferencia, Conta contaDestino)
         {
-            if (this.Sacar(valorTransferencia))
+            bool transferiu = false;
+            if (valorTransferencia > 0)
             {
-                contaDestino.Depositar(valorTransferencia);
+                if (this.Sacar(valorTransferencia))
+                {
+                    if (contaDestino.Depositar(valorTransferencia, true))
+                    {
+                        transferiu = true;
+                        Console.WriteLine("Transferencia efetuada com sucesso!");
+                    }
+                    else
+                    {
+                        //devolve o dinheiro da conta que havia sido sacada. - provavelmente usariam alguma fila.
+                        this.Depositar(valorTransferencia, true);
+                        Console.WriteLine("Transferencia não efetuada.");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Transferencia não efetuada.");
+                }
             }
+            return transferiu;
         }
         #endregion
     }
