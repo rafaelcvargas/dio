@@ -1,4 +1,4 @@
-﻿namespace ConsoleBankRafa.Domain
+﻿namespace ConsoleBankRafa.Enum
 {
     public enum TipoConta
     {

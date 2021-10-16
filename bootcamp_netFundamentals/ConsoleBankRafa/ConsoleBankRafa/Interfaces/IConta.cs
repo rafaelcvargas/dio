@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace ConsoleBankRafa.Domain.Contract
+﻿using ConsoleBankRafa.Classes;
+namespace ConsoleBankRafa.Interfaces
 {
-    public interface IContaService
+    public interface IConta
     {
         bool Sacar(double valorSaque);
 
